@@ -1,4 +1,6 @@
 */*.key
 */*.crt
+tmp/
+*/tmp
 
 

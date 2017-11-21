@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: anchore-engine
+  labels:
+    app: anchore-engine
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 8228
+      protocol: TCP
+  selector:
+    app: anchore-engine
+
