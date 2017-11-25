@@ -1,0 +1,89 @@
+# Anchore Service Configuration File for analyzer-only nodes
+
+# General system-wide configuration options, these should not need to
+# be altered for basic operation
+#
+# service_dir: '/config'
+# tmp_dir: '/tmp'
+# log_level: 'DEBUG'
+#
+# allow_awsecr_iam_auto: False
+cleanup_images: True
+# docker_conn: 'unix://var/run/docker.sock'
+# docker_conn_timeout: 600
+#
+#
+log_level: 'INFO'
+
+# Unlike the core service pod, worker pods will dynamically generate their host ids. Leave this unset.
+#host_id: <host_id>
+internal_ssl_verify: False
+
+credentials:
+  users:
+     admin:
+       password: ${ANCHORE_ADMIN_PASSWORD}
+       email: 'admin@myemail.com'
+       external_service_auths:
+  database:
+    db_connect: "postgresql+pg8000://${ANCHORE_DB_USER}:${ANCHORE_DB_PASSWORD}@${ANCHORE_DB_POSTGRESQL_SERVICE_HOST}:${ANCHORE_DB_POSTGRESQL_SERVICE_PORT}/postgres"
+    db_connect_args:
+      timeout: 120
+      ssl: False
+    db_pool_size: 30
+    db_pool_max_overflow: 100
+
+services:
+  apiext:
+    enabled: False
+    require_auth: True
+    endpoint_hostname: 'localhost'
+    listen: '0.0.0.0'
+    port: 8228
+    #ssl_enable: True
+    #ssl_cert: '/config/selfsigned-example.cert'
+    #ssl_key: '/config/selfsigned-example.key'
+  kubernetes_webhook:
+    enabled: False
+    require_auth: False
+    endpoint_hostname: 'localhost'
+    listen: '0.0.0.0'
+    port: 8338
+    #ssl_enable: True
+    #ssl_cert: '/config/selfsigned-example.cert'
+    #ssl_key: '/config/selfsigned-example.key'
+  catalog:
+    enabled: False
+    require_auth: True
+    endpoint_hostname: 'localhost'
+    listen: '0.0.0.0'
+    port: 8082
+    use_db: True
+    cycle_timer_seconds: '1'
+    cycle_timers:
+      image_watcher: 3600
+      policy_eval: 3600
+      feed_sync: 14400
+      analyzer_queue: 1
+      notifications: 30
+      service_watcher: 15
+      policy_bundle_sync: 300
+  simplequeue:
+    enabled: False
+    require_auth: True
+    endpoint_hostname: ${ANCHORE_ENGINE_SERVICE_SERVICE_HOST}
+    listen: '0.0.0.0'
+    port: ${ANCHORE_ENGINE_SERVICE_SERVICE_PORT_SIMPLEQUEUE}
+  analyzer:
+    enabled: True
+    cycle_timer_seconds: '1'
+    max_threads: '1'
+  policy_engine:
+    enabled: False 
+    require_auth: True
+    endpoint_hostname: 'localhost'
+    listen: '0.0.0.0'
+    port: 8087
+    #ssl_enable: True
+    #ssl_cert: '/config/selfsigned-example.cert'
+    #ssl_key: '/config/selfsigned-example.key'
