@@ -72,4 +72,4 @@ As needed you can scale the deployment (e.g. kubectl scale --replicas=3 deployme
 Configuring CLI and Clients
 ===========================
 
-The IP/host to use for clients can be retrieved using: ```kubectl get svc anchore-engine-service``` and using the 'External IP' value. Set your ```ANCHORE_CLI_URI=http://<external ip>/v1/``` in your config or environment to point anchore-cli at the deployed service. For services internal to k8s you can use the cluster ip of the service instead.
+The IP/host to use for clients can be retrieved using: ```kubectl get svc anchore-engine-service``` and using the 'External IP' value. Set your ```ANCHORE_CLI_URL=http://<external ip>/v1/``` in your config or environment to point anchore-cli at the deployed service. For services internal to k8s you can use the cluster ip of the service instead.
