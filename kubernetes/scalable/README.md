@@ -27,7 +27,7 @@ The other specific aspect of this config example is that the postgres db user is
 
 Deploy postgresql db as a service via helm or your preferred db deployment mechanism:
 ```
-helm install anchore-db stable/postgresql
+helm install -n anchore-db stable/postgresql
 ```
 
 Anchore Engine Core
