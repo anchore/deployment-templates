@@ -35,6 +35,8 @@ Anchore Engine Core
 
 The Anchore Engine Core service provides the external api, queueing system, and policy engine as well as the optional kubernetes webhook handler service (for imagepolicywebhook handling) that external clients will interact with. This is service does not process images for analysis directly so is fairly lightweight. It is configured as a single pod and should always have only a single replica (there are stateful coordinators in some services contained in this pod).
 
+In this example, we use a service definition with a load balancer to expose the service outside the cluster, but that can be omitted if you want the service to be internal only.
+
 Create the anchore-engine-core service:
 ```
 cp core-config.yaml config.yaml
@@ -67,3 +69,7 @@ rm config.yaml
 
 As needed you can scale the deployment (e.g. kubectl scale --replicas=3 deployment/anchore-engine-analyzer-deployment)
 
+Configuring CLI and Clients
+===========================
+
+The IP/host to use for clients can be retrieved using: ```kubectl get svc anchore-engine-service``` and using the 'External IP' value. Set your ANCHORE_CLI_URI='http://<external ip>/v1/' in your config or environment to point anchore-cli at the deployed service. For services internal to k8s you can use the cluster ip of the service instead.
