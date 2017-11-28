@@ -38,7 +38,9 @@ The Anchore Engine Core service provides the external api, queueing system, and 
 Create the anchore-engine-core service:
 ```
 cp core-config.yaml config.yaml
+<set admin password in anchore-engine-users-secrets.yaml using b64 encoded password you want to use>
 kubectl create configmap anchore-core-config --from-file=config.yaml
+kubectl craete -f anchore-engine-users-secrets.yaml
 kubectl create -f anchore-engine-core-service.yaml
 rm config.yaml
 ```
