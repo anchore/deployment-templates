@@ -17,4 +17,4 @@ We will do our best to update and test each configuration but inevitably problem
 
 # Contributing
 
-For guidelines and requirements for contributing to this repository see CONTRIBUTING.md
+For guidelines and requirements for contributing to this repository see [CONTRIBUTING](CONTRIBUTING.rst)
