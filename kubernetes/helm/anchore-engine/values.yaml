@@ -11,6 +11,7 @@ service:
     k8sImagePolicyWebhook: 8338
 
 image:
+  # Specific version tags are also available, e.g. v0.1.5, v0.1.6,...
   tag: docker.io/anchore/anchore-engine:latest
   pullPolicy: IfNotPresent
 
@@ -32,6 +33,12 @@ postgresql:
   postgresUser: anchoreengine
   postgresPassword: anchore-postgres,123
   postgresDatabase: anchore
+
+
+  # Use this config if you set enabled=False and want to specify an external (already existing) postres deployment for use.
+  # Set this to the host and port. eg. mypostgres.myserver.io:5432
+  externalEndpoint: Null
+
 
 # Global configuration shared by both core and worker
 globalConfig:
