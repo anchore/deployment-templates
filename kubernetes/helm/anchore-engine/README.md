@@ -33,10 +33,9 @@ do not have their own external api.
 Installing the Chart
 --------------------
 
+Deploying PostgreSQL as a dependency managed in the chart:
 
-Deploying PostgreSQL as a dependency:
-
-`helm install --name <name> .`
+`helm install .`
 
 
 Using and existing/external PostgreSQL service:

@@ -4,7 +4,7 @@ metadata:
   name: "{{ template "core.fullname" . }}"
   labels:
     app: "{{ template "fullname" . }}"
-    role: core
+    component: core
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"

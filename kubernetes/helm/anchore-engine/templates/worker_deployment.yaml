@@ -4,10 +4,10 @@ metadata:
   name: "{{ template "worker.fullname" . }}"
   labels:
     app: "{{ template "fullname" . }}"
-    role: worker
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
+    component: worker
 spec:
   replicas: {{ .Values.workerConfig.replicaCount }}
   template:
