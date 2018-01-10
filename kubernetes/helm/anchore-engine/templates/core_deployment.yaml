@@ -70,21 +70,21 @@ spec:
           mountPath: {{ default "/certs" .Values.coreConfig.ssl.certDir }}
           readOnly: True
         {{- end }}
-#        readinessProbe:
-#          httpGet:
-#            path: /health
-#            port: external-api
-#          initialDelaySeconds: 60
-#          periodSeconds: 10
-#          timeoutSeconds: 10
-#          failureThreshold: 10
-#        livenessProbe:
-#          httpGet:
-#            path: /health
-#            port: external-api
-#          timeoutSeconds: 10
-#          initialDelaySeconds: 60
-#          periodSeconds: 10
-#          failureThreshold: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: external-api
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 10
+          failureThreshold: 10
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: external-api
+          timeoutSeconds: 10
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          failureThreshold: 10
         resources:
 {{ toYaml .Values.coreConfig.resources | indent 10 }}
