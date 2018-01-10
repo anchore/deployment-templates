@@ -19,10 +19,10 @@ spec:
       containers:
       - name: {{ .Chart.Name }}-worker
         image: {{ .Values.image.tag }}
-        {{ if eq .Values.workerConfig.analyzerMode "localanchore" }}
+        {{- if eq .Values.workerConfig.analyzerMode "localanchore" }}
         securityContext:
           privileged: true
-        {{ end }}
+        {{- end }}
         env:
         - name: ANCHORE_ENGINE_SERVICES
           value: anchore-worker
@@ -48,15 +48,15 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /config
-        {{ if eq .Values.workerConfig.analyzerMode "localanchore" }}
+        {{- if eq .Values.workerConfig.analyzerMode "localanchore" -}}
         - name: docker-sock
           mountPath: /var/run/docker.sock
-        {{ end }}
-        {{ if .Values.enableCertVolume }}
+        {{- end -}}
+        {{- if .Values.globalConfig.internalServicesSslEnabled }}
         - name: certs
-          mountPath: /certs
+          mountPath: {{ default "/certs" .Values.workerConfig.ssl.CertDir }}
           readOnly: true
-        {{ end }}
+        {{- end }}
         - name: analysis-scratch
           mountPath: {{ .Values.workerConfig.analysisScratchVolume.mountPath }}
         livenessProbe:
@@ -73,17 +73,15 @@ spec:
         - name: config-volume
           configMap:
             name: {{ template "worker.fullname" .}}
-        {{ if eq .Values.workerConfig.analyzerMode "localanchore" }}
+        {{- if eq .Values.workerConfig.analyzerMode "localanchore" }}
         - name: docker-sock
           hostPath:
             path: /var/run/docker.sock
-        {{ end }}
-        {{ if .Values.enableCertVolume }}
+        {{- end }}
+        {{- if .Values.globalConfig.internalServicesSslEnabled }}
         - name: certs
           secret:
-            secretName: {{ .Values.certSecret }}
-        {{ end }}
+            secretName: {{ .Values.workerConfig.ssl.certSecret }}
+        {{- end }}
         - name: analysis-scratch
-          {{ toYaml .Values.workerConfig.analysisScratchVolume.details }}
-
-
+          {{ toYaml .Values.workerConfig.analysisScratchVolume.details -}}

@@ -12,7 +12,7 @@ data:
   config.yaml: |
     # Anchore Service Configuration File from ConfigMap
     service_dir: {{ default "/config" .Values.globalConfig.configDir }}
-    tmp_dir: /tmp
+    tmp_dir: "/tmp"
 
     allow_awsecr_iam_auto: {{ .Values.globalConfig.allowECRUseIAMRole }}
     cleanup_images: {{ .Values.globalConfig.cleanupImages }}
@@ -22,17 +22,16 @@ data:
 
     log_level: {{ .Values.coreConfig.logLevel }}
     host_id: ${ANCHORE_HOST_ID}
-    internal_ssl_verify: {{ .Values.coreConfig.ssl.internalServiceVerifyCerts }}
+    internal_ssl_verify: {{ .Values.globalConfig.internalServicesSslVerifyCerts }}
 
     # Uncomment if you have a local endpoint that can accept
     # notifications from the anchore-engine, as configured below
     #
     {{ if .Values.coreConfig.webhooks.enabled }}
     webhooks:
-{{ toYaml .Values.coreconfig.webhooks.config | indent 6 }}
+{{ toYaml .Values.coreConfig.webhooks.config | indent 6 }}
     {{ end }}
 
-    #
     # A feeds section is available for override, but shouldn't be
     # needed. By default, the 'admin' credentials are used if present,
     # otherwise anonymous access for feed sync is used
@@ -85,18 +84,18 @@ data:
         endpoint_hostname: {{ template "fullname" . }}
         listen: '0.0.0.0'
         port: {{ .Values.service.ports.api }}
-        ssl_enable: {{ .Values.coreConfig.ssl.internalServicesEnabled }}
-        ssl_cert: {{ .Values.coreConfig.ssl.sslCert }}
-        ssl_key: {{ .Values.coreConfig.ssl.sslKey }}
+        ssl_enable: {{ .Values.globalConfig.internalServicesSslEnabled }}
+        ssl_cert: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretCertName }}
+        ssl_key: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretKeyName }}
       kubernetes_webhook:
         enabled: True
         require_auth: False
         endpoint_hostname: {{ template "fullname" . }}
         listen: '0.0.0.0'
         port: {{ .Values.service.ports.k8sImagePolicyWebhook }}
-        ssl_enable: {{ .Values.coreConfig.ssl.internalServicesEnabled }}
-        ssl_cert: {{ .Values.coreConfig.ssl.sslCert }}
-        ssl_key: {{ .Values.coreConfig.ssl.sslKey }}
+        ssl_enable: {{ .Values.globalConfig.internalServicesSslEnabled }}
+        ssl_cert: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretCertName }}
+        ssl_key: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretKeyName }}
       catalog:
         enabled: True
         require_auth: True
@@ -107,18 +106,18 @@ data:
         cycle_timer_seconds: '1'
         cycle_timers:
 {{ toYaml .Values.globalConfig.cycleTimers | indent 10 }}
-        ssl_enable: {{ .Values.coreConfig.ssl.internalServicesEnabled }}
-        ssl_cert: {{ .Values.coreConfig.ssl.sslCert }}
-        ssl_key: {{ .Values.coreConfig.ssl.sslKey }}
+        ssl_enable: {{ .Values.globalConfig.internalServicesSslEnabled }}
+        ssl_cert: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretCertName }}
+        ssl_key: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretKeyName }}
       simplequeue:
         enabled: True
         require_auth: True
         endpoint_hostname: {{ template "fullname" . }}
         listen: '0.0.0.0'
         port: {{ .Values.service.ports.queue }}
-        ssl_enable: {{ .Values.coreConfig.ssl.internalServicesEnabled }}
-        ssl_cert: {{ .Values.coreConfig.ssl.sslCert }}
-        ssl_key: {{ .Values.coreConfig.ssl.sslKey }}
+        ssl_enable: {{ .Values.globalConfig.internalServicesSslEnabled }}
+        ssl_cert: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretCertName }}
+        ssl_key: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretKeyName }}
       analyzer:
         enabled: False
       policy_engine:
@@ -127,6 +126,6 @@ data:
         endpoint_hostname: {{ template "fullname" . }}
         listen: '0.0.0.0'
         port: {{ .Values.service.ports.policy }}
-        ssl_enable: {{ .Values.coreConfig.ssl.internalServicesEnabled }}
-        ssl_cert: {{ .Values.coreConfig.ssl.sslCert }}
-        ssl_key: {{ .Values.coreConfig.ssl.sslKey }}
+        ssl_cert: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretCertName }}
+        ssl_key: {{ .Values.coreConfig.ssl.certDir -}}/{{- .Values.coreConfig.ssl.certSecretKeyName }}
+        ssl_enable: {{ .Values.globalConfig.internalServicesSslEnabled }}

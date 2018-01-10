@@ -13,7 +13,7 @@ service:
 image:
   # Specific version tags are also available, e.g. v0.1.5, v0.1.6,...
   tag: docker.io/anchore/anchore-engine:latest
-  pullPolicy: IfNotPresent
+  #pullPolicy: IfNotPresent
 
 # Used to create Ingress record (should used with service.type: ClusterIP or NodePort depending on platform)
 ingress:
@@ -69,6 +69,9 @@ globalConfig:
         user: someuser
         password: somepassword
 
+  internalServicesSslEnabled: False
+  internalServicesSslVerifyCerts: False
+
   # Intervals to run specific events on (seconds)
   cycleTimers:
     # Interval to check for an update to a tag
@@ -95,35 +98,36 @@ coreConfig:
   hostId: "anchore-engine-core-host"
   logLevel: INFO
   policyBundleSyncEnabled: False
+
   ssl:
-    certSecret: tlstestsecret
-    internalServicesEnabled: False
-    internalServiceVerifyCerts: False
-    sslCert: '/config/example.cert'
-    sslKey: '/config/example.key'
+    # To use certs for TLS directly from the services, create a secret with keys that match the values fo certSecretKey and certSecretCert
+    certSecret: null
+    certSecretKeyName: "tls.key"
+    certSecretCertName: "tls.crt"
+    certDir: "/certs"
+
 
   # Configure webhook outputs here. The service provides these webhooks for notifying external systems of updates
   webhooks:
-    enabled: False
+    enabled: True
     config:
       # User and password to be set (using HTTP basic auth) on all webhook calls if necessary
       user: null
       password: null
-
-      ssl_verify: False
+      ssl_verify: True
 
       # Endpoint for general notification delivery. These events are image/tag updates etc. This is globally configured
       # and updates for all users are sent to the same host but with a different path for each user.
-      general:
-        url: 'http://somehost:9090/general/<notification_type>/<userId>'
+      general: {}
+        #url: "http://somehost:9090/<notification_type>/<userId>"
       # Endpoint and credentials for policy evaluation delivery
-      policy_eval:
-        url: 'http://somehost:9090/policy_eval/<userId>'
-        user: null
-        password: null
+      policy_eval: {}
+        #url: "http://somehost:9090/policy_eval/<userId>"
+        #user: null
+        #password: null
       # Endpoint for fatal system errors to be delivery
-      error_event:
-        url: 'http://somehost:9090/error_event/'
+      error_event: {}
+        #url: 'http://somehost:9090/error_event/'
 
   #resources:
   #  limits:
@@ -165,14 +169,10 @@ workerConfig:
 
   # Configuration for ssl used for internal node communications between components
   ssl:
-    certSecret: tlstestsecret
-    internalServicesEnabled: False
-    internalServiceVerifyCerts: False
-    sslCert: '/config/example.cert'
-    sslKey: '/config/example.key'
-
-  # Delete docker images from analysis workers after analysis completes successfully
-  cleanupImages: True
+    certDir: "/certs"
+    certSecret: null
+    certSecretKeyName: "tls.key"
+    certSecretCertName: "tls.crt"
 
   #resources:
   #  limits:

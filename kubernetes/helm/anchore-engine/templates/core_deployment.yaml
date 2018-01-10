@@ -20,11 +20,11 @@ spec:
         - name: config-volume
           configMap:
             name: {{ template "core.fullname" .}}
-        {{ if .Values.coreConfig.internalServicesEnabled }}
+        {{- if .Values.globalConfig.internalServicesSslEnabled }}
         - name: certs
           secret:
-            secretName: {{ .Values.coreConfig.certSecret }}
-        {{ end }}
+            secretName: {{ .Values.coreConfig.ssl.certSecret }}
+        {{- end }}
       containers:
       - name: {{ .Chart.Name }}-core
         image: {{ .Values.image.tag }}
@@ -65,24 +65,26 @@ spec:
         volumeMounts:
         - name: config-volume
           mountPath: /config
-        {{ if .Values.coreConfig.internalServicesEnabled }}
+        {{- if .Values.globalConfig.internalServicesSslEnabled }}
         - name: certs
-          mountPath: /certs
-        {{ end }}
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: external-api
-          initialDelaySeconds: 60
-          periodSeconds: 10
-          timeoutSeconds: 10
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: external-api
-          timeoutSeconds: 10
-          initialDelaySeconds: 60
-          periodSeconds: 10
-          failureThreshold: 10
+          mountPath: {{ default "/certs" .Values.coreConfig.ssl.certDir }}
+          readOnly: True
+        {{- end }}
+#        readinessProbe:
+#          httpGet:
+#            path: /health
+#            port: external-api
+#          initialDelaySeconds: 60
+#          periodSeconds: 10
+#          timeoutSeconds: 10
+#          failureThreshold: 10
+#        livenessProbe:
+#          httpGet:
+#            path: /health
+#            port: external-api
+#          timeoutSeconds: 10
+#          initialDelaySeconds: 60
+#          periodSeconds: 10
+#          failureThreshold: 10
         resources:
 {{ toYaml .Values.coreConfig.resources | indent 10 }}

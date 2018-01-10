@@ -19,14 +19,14 @@ data:
     tmp_dir: {{ default "/tmp" .Values.workerConfig.analyzerScratchDir }}
 
     allow_awsecr_iam_auto: {{ .Values.globalConfig.allowECRUseIAMRole }}
-    cleanup_images: {{ .Values.workerConfig.cleanupImages }}
+    cleanup_images: {{ .Values.globalConfig.cleanupImages }}
 
     #docker_conn: 'unix://var/run/docker.sock'
     #docker_conn_timeout: 600
 
     log_level: {{ .Values.workerConfig.logLevel }}
     #host_id: 'e3651c16-5161-412f-a188-2bfae2d2dcf0'
-    internal_ssl_verify: {{ .Values.coreConfig.ssl.internalServiceVerifyCerts }}
+    internal_ssl_verify: {{ .Values.globalConfig.internalServicesSslVerifyCerts }}
 
     #
     # A feeds section is available for override, but shouldn't be
@@ -57,3 +57,7 @@ data:
         cycle_timer_seconds: {{ .Values.workerConfig.cycleTimerSeconds }}
         max_threads: {{ .Values.workerConfig.concurrentTasksPerWorker }}
         analyzer_driver: {{ .Values.workerConfig.analyzerMode }}
+        ssl_cert: {{ .Values.workerConfig.ssl.certDir -}}/{{- .Values.workerConfig.ssl.certSecretCertName }}
+        ssl_key: {{ .Values.workerConfig.ssl.certDir -}}/{{ .Values.workerConfig.ssl.certSecretKeyName }}
+        ssl_enable: {{ .Values.globalConfig.internalServicesSslEnabled }}
+
