@@ -7,6 +7,10 @@ To configure your anchore-cli run:
     ANCHORE_CLI_USER=admin
     ANCHORE_CLI_PASS=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.adminPassword}" | base64 --decode; echo)
 
+Run an Anchore CLI Pod that you can use a client:
+
+    kubectl run -i --tty anchorecli --image=anchore/anchore-cli -e ANCHORE_CLI_USER=admin -e ANCHORE_CLI_PASS=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "fullname" . }} -o jsonpath="{.data.adminPassword}" | base64 --decode; echo)
+
 To get the service endpoint:
 
 If using an ingress:
