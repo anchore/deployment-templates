@@ -1,7 +1,11 @@
 Helm Charts
 ===========
 
-Chart(s) for deploying anchore engine services into Kubernetes clusters using [Helm](https://helm.sh) package manager.
+Anchore Engine is now in "stable" of the [official charts repository](https://github.com/kubernetes/charts/tree/master/stable/anchore-engine).
 
-The charts contained in the repository are for testing/development pending merge into the official repository via a fork,
-or to provide alternative charts with other deployment topologies of interest beyond the normal recommendations.
+You can install it using:
+ 
+ `helm install stable/anchore-engine`
+
+
+
