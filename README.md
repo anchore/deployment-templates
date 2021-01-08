@@ -1,3 +1,5 @@
+**NOTE: This repository is not currently actively maintained. For Kubernetes deployments see the [Anchore Charts repository](https://github.com/anchore/anchore-charts) for [Helm](https://helm.sh) charts or our [Operator](https://operatorhub.io/operator/anchore-engine) for using the operator pattern.**
+
 # Deploying Anchore Engine
 
 This repository provides deployment examples for Anchore Engine on a variety of platforms and configurations and is intended as a starting point for developing production configurations of Anchore Engine. Importantly: these are not expected to be full production configurations and will often omit things that are site-specific such as certificate configuration or DNS entries depending on the platform. The purpose of this repository is to show a few deployment architectures and provide solid baseline examples for deploying anchore engine that can be customized and tailored for individual production environments and requirements.
